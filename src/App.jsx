@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import './App.css'
 
-import shoppingIcon from './assets/shopping-icon.svg'
 import plusIcon from './assets/plus-icon.svg'
 import minusIcon from './assets/minus-icon.svg'
+import Navbar from './components/Navbar'
+import Container from './components/Container'
 
 function App() {
   const [value, setValue] = useState('')
@@ -49,14 +50,19 @@ function App() {
     setTodos(newTodos)
   }
 
+  const getCount = () => {
+    const data = todos.reduce((total, num) => {
+      return total + num.count
+    },0)
+
+    return data
+  }
+
   return (
     <>
-    <nav className='nav'>
-      <img className='nav-icon' src={shoppingIcon} alt="Shopping Icon" />
-      <h1 className='nav-title'>Shopping List</h1>
-    </nav>
+    <Navbar />
 
-    <section className='container'>
+    <Container>
       <form className='form' onSubmit={addList}>
         <input className='input' type="text" placeholder='List'
           onChange={(e) => setValue(e.target.value)}
@@ -64,6 +70,21 @@ function App() {
         />
         <button className='add-button' type='submit'>Add</button>
       </form>
+
+      <div className='info'>
+        <div className='info-total'>
+          <p>{`Total List : ${todos.length}`}</p>
+        </div>
+
+        <div className='info-total'>
+          <p>{`Total Count : ${getCount()}`}</p>
+        </div>
+
+        <button onClick={() => setTodos([])} className='delete-all-button'>
+          Delete All List
+        </button>
+      </div>
+
       {todos.length > 0 ? (
         <div className='todos'>
           {todos.map((todo, index) => {
@@ -93,7 +114,7 @@ function App() {
         <div>Kosong</div>
       ) } 
       
-    </section>
+    </Container>
     </>
   )
 }
